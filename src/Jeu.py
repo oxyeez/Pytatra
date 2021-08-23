@@ -52,13 +52,14 @@ def joue(jeu):
 	global Desequilibre
 	GameOn = True
 	Desequilibre = False
+	save_file_path = './GameSave.txt'
 	
 	majVues(jeu) #premier affichage graphique du jeu, cela n'affiche que les pioches (pleines) au départ, car la pile est vide
 	
-	if os.path.getsize('GameSave.txt') != 0 :
+	if os.path.getsize(save_file_path) != 0 :
 		load_save = Dialogue.choix('Il existe une partie sauvegardée.\nVoulez-vous la continuer ?')
 		if load_save :
-			with open('GameSave.txt', 'rb') as save_file:
+			with open(save_file_path, 'rb') as save_file:
 				save = pickle.load(save_file)
 				jeu = gameSaved(jeu, save[0], save[1], save[2])
 				majVues(jeu)
@@ -88,7 +89,7 @@ def joue(jeu):
 	elif not GameOn :
 		if not Pile.estVide(pile(jeu)) :
 			if Dialogue.choix('Vous avez mis fin au jeu avant sa fin.\nVoulez-vous sauvegarder la partie ?') :
-				with open('GameSave.txt', 'wb') as save_file:
+				with open(save_file_path, 'wb') as save_file:
 					pickle.dump([pile(jeu), joueurs(jeu), jeu[3]], save_file)
 	'''
 	lorsque le jeu ne peut plus continuer, en fonction de la raison qui met fin au jeu, on affiche un message différent et des actions peuvent être effectuées :
